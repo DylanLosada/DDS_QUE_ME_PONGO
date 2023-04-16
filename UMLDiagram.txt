@@ -1,0 +1,75 @@
+@startuml
+
+class Usuarie {
+  HashMap<CategoriaEnum, List<Prenda>> guardarropa;
+  void loadPrenda(TipoPrendaEnum, CategoriaEnum, String, String, String)
+  Atuendo generateAtuendo()
+}
+
+class Prenda {
+  String material;
+  String colorPrincipal;
+  String colorSecundario;
+
+  CategoriaEnum getCategoria()
+}
+
+class Atuendo {
+  Prenda accesorio;
+  Prenda prendaSuperior;
+  Prenda prendaInferior;
+  Prenda calzado;
+}
+
+enum CategoriaEnum {
+  PARTE_SUPERIOR,
+  PARTE_INFERIOR,
+  CALZADO,
+  ACCESORIO
+}
+
+enum TipoPrendaEnum {
+  ZAPATO(CategoriaEnum),
+  CAMISA_MANGA_CORTA(CategoriaEnum),
+  PANTALON(CategoriaEnum);
+
+  CategoriaEnum categoria;
+}
+
+class AtuendoBuilder {
+  Atuendo build()
+}
+
+class PrendaBuilder {
+  String material
+  String colorPrincipal
+  String colorSecundario
+
+  PrendaBuilder withPrenda(TipoPrendaEnum)
+  PrendaBuilder withCategoria(CategoriaEnum)
+  PrendaBuilder withMaterial(String)
+  PrendaBuilder withColorPrincipal(String)
+  PrendaBuilder withColorSecundario(String)
+  Prenda build()
+
+}
+
+AtuendoBuilder --> Prenda
+AtuendoBuilder .-> Atuendo
+
+PrendaBuilder --> CategoriaEnum
+PrendaBuilder --> TipoPrendaEnum
+PrendaBuilder .-> Prenda
+
+Usuarie -->"*" CategoriaEnum
+Usuarie -->"*" Prenda
+Usuarie .-> PrendaBuilder
+Usuarie .-> AtuendoBuilder
+
+
+Prenda -->"1" TipoPrendaEnum
+Prenda -->"1" CategoriaEnum
+
+Atuendo --> Prenda
+
+@enduml
