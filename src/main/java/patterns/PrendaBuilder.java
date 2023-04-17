@@ -6,7 +6,6 @@ import enums.TipoPrendaEnum;
 import errors.CampoObligatorioException;
 
 public class PrendaBuilder {
-  private final String MESAGGE_PRENDA_DIFFERENT_CATEGORIA = "La categoria seleccionada no coincide con la categoria de la prenda";
   private TipoPrendaEnum tipoPrenda;
   private CategoriaEnum categoria;
   private String material;
@@ -14,16 +13,16 @@ public class PrendaBuilder {
   private String colorSecundario;
 
   public PrendaBuilder withPrenda(TipoPrendaEnum prenda) {
-    if (this.categoria != null && !this.categoria.equals(prenda.getCategoria())) {
-      throw new RuntimeException(MESAGGE_PRENDA_DIFFERENT_CATEGORIA);
+    if (this.categoria != null && prenda != null && !this.categoria.equals(prenda.getCategoria())) {
+      throw CampoObligatorioException.tipoPrendaIsntEqualToCategoria();
     }
     this.tipoPrenda = prenda;
     return this;
   }
 
   public PrendaBuilder withCategoria(CategoriaEnum categoria) {
-    if (this.tipoPrenda != null && !this.tipoPrenda.getCategoria().equals(categoria)) {
-      throw new RuntimeException(MESAGGE_PRENDA_DIFFERENT_CATEGORIA);
+    if (this.tipoPrenda != null && categoria != null && !this.tipoPrenda.getCategoria().equals(categoria)) {
+      throw CampoObligatorioException.tipoPrendaIsntEqualToCategoria();
     }
     this.categoria = categoria;
     return this;
@@ -65,7 +64,6 @@ public class PrendaBuilder {
     if (this.material == null) {
       throw CampoObligatorioException.materialObligatorio();
     }
-
   }
 
 }

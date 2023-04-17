@@ -3,7 +3,8 @@ package enums;
 public enum TipoPrendaEnum {
   ZAPATO(CategoriaEnum.CALZADO),
   CAMISA_MANGA_CORTA(CategoriaEnum.PARTE_SUPERIOR),
-  PANTALON(CategoriaEnum.PARTE_INFERIOR);
+  PANTALON(CategoriaEnum.PARTE_INFERIOR),
+  LENTES_SOL(CategoriaEnum.ACCESORIO);
 
   private final CategoriaEnum categoria;
 

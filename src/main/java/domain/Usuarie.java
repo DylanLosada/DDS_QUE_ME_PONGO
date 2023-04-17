@@ -2,6 +2,7 @@ package domain;
 
 import enums.CategoriaEnum;
 import enums.TipoPrendaEnum;
+import errors.AtuendoExcepcion;
 import errors.CampoObligatorioException;
 import errors.DomainException;
 import java.util.Collections;
@@ -12,6 +13,10 @@ import patterns.PrendaBuilder;
 
 public class Usuarie {
   private HashMap<CategoriaEnum, List<Prenda>> guardarropa;
+
+  public Usuarie() {
+    this.guardarropa = new HashMap<>();
+  }
 
   public void loadPrenda(TipoPrendaEnum tipo, CategoriaEnum categoria, String material, String colorPrincipal, String colorSecundario) {
     Prenda loadedPrenda;
@@ -30,13 +35,22 @@ public class Usuarie {
   }
 
   public Atuendo generateAtuendo() {
-    validateThereArePrendas();
-    return new AtuendoBuilder().build();
+    try {
+      validateThereArePrendas();
+      return new AtuendoBuilder()
+          .withPrendaSuperior(guardarropa.get(CategoriaEnum.PARTE_SUPERIOR))
+          .withPrendainferior(guardarropa.get(CategoriaEnum.PARTE_INFERIOR))
+          .withCalzado(guardarropa.get(CategoriaEnum.CALZADO))
+          .withAccesorio(guardarropa.get(CategoriaEnum.ACCESORIO))
+          .build();
+    } catch (AtuendoExcepcion excepcion) {
+      throw DomainException.cannotGenerateAtuendoBecouseThereIsntASpecificCategory(excepcion.getMessage());
+    }
   }
 
   private void validateThereArePrendas() {
     if (guardarropa.isEmpty()) {
-      throw DomainException.cannotGenerateAtuendo();
+      throw DomainException.cannotGenerateAtuendoBecouseThereArentPrendas();
     }
   }
 
@@ -48,6 +62,10 @@ public class Usuarie {
     } else {
       guardarropa.put(categoria, Collections.singletonList(prenda));
     }
+  }
+
+  public HashMap<CategoriaEnum, List<Prenda>> getGuardarropa() {
+    return guardarropa;
   }
 
 }
